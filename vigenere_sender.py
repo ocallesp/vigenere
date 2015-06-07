@@ -29,26 +29,48 @@ def add_more_characters(extra):
 
 
     if extra == "capital":
-        ALPHABET = ALPHABET + EXTRA_CAPITAL
+        ALPHABET += EXTRA_CAPITAL
     elif extra == "numbers":
-        ALPHABET = ALPHABET + EXTRA_NUMBERS
-    elif extra == "":
-        ALPHABET = ALPHABET 
+        ALPHABET += EXTRA_NUMBERS
     else:
-        ALPHABET = ALPHABET + extra
+        ALPHABET += extra
+
+
 
 if __name__ ==  "__main__":
-    parser = argparse.ArgumentParser(description="Encrypt text with Vigenere algorithm")
-    parser.add_argument('--key', help='key help')
+    global ALPHABET_SIZE
+    global KEY_SIZE
+
+    parser = argparse.ArgumentParser(description="Encrypt plain text using Vigenere algorithm")
+    parser.add_argument('-k', '--key', help='key used to encrypt the plain text')
+    parser.add_argument('-ks','--key-size', help='size of the key to generate')
+    parser.add_argument('-p','--pipe', help='name of pipe')
+    parser.add_argument('-e','--expand-alphabet',help='add a defined list of characters to the alphabet.\
+                  "number" - add numbers from 0 to 9, "capital" - add capital letters, or a list of strings')
+    parser.add_argument('--eos', help="character to end streaming")
+
     args = parser.parse_args()
 
+    if args.expand_alphabet != None:
+        add_more_characters(args.expand_alphabet)
+    ALPHABET_SIZE = len( ALPHABET )
 
-    add_more_characters("")
-    
+    if args.key != None:
+        KEY = args.key
+    else:
+        if args.key_size != None:
+            key_generator(key_size)
+
+    if args.eof != None:
+        END_STREAMING = args.eof
+
+
+    KEY_SIZE = len(KEY)
+
     print "ALPHABET: " + ALPHABET
-    print "number of characters: " + str( len(ALPHABET) )
+    print "number of characters: " + str( ALPHABET_SIZE )
     print "KEY: " + KEY
-    print "size of key: " + str( len(KEY) )
+    print "size of key: " + str( KEY_SIZE )
 
     with open(PIPE,"w",0) as f:
         
